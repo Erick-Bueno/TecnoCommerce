@@ -41,18 +41,18 @@ router.post("/login", async function(req, res){
         if(!verificarEmail){
                 const respError = {
                     erro: "email não cadastrado",
-                    status: 405
+                    status: 404
                 }
-                return res.json({msg: respError}).status(405)
+                return res.json({msg: respError}).status(404)
         }
         const senhaBanco = verificarEmail.Senha
         const descript = await bcrypt.compare(Senha, senhaBanco)
         if(descript == false){
             const resperror2 = {
                 erro: "senha incorreta",
-                status: 406
+                status: 404
             }
-            return res.json({msg: resperror2}).status(406)
+            return res.json({msg: resperror2}).status(404)
         }
         const id = verificarEmail.id
         const tokenjwt = jwt.sign({id},process.env.SECRET,{expiresIn:500})
