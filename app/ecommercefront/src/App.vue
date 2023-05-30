@@ -1,38 +1,40 @@
 <template>
   <div class="container-geral">
     <div class="container-cima">
-      <div v-show="mostrar">
+      <div v-if="mostrar">
         <cabeça></cabeça>
       </div>
-      <div>
+      <div class="conteudo">
         <RouterView></RouterView>
       </div>
     </div>
     <div v-show="mostrar">
-      footer
+      <rodape></rodape>
     </div>
   </div>
-</template> 
+</template>
 <script>
-  import cabeça from './components/header.vue'
-  export default{
-    components:{
-      cabeça
-    }, 
-    computed:{
-      mostrar(){
-        return this.$route.name !== 'login' && this.$route.name !=='cadastro'
-      }
-    }
-  }
+import cabeça from "./components/header.vue";
+import rodape from "./components/footer.vue";
+export default {
+  components: {
+    cabeça,
+    rodape,
+  },
+  computed: {
+    mostrar() {
+      return this.$route.name !== "login" && this.$route.name !== "cadastro";
+    },
+  },
+};
 </script>
 <style>
-*{
+* {
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
 }
-  .container-geral {
+.container-geral {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -40,5 +42,9 @@
 
 .container-cima {
   flex: 1;
+  background-color: rgb(196, 200, 204);
+}
+.conteudo {
+  margin-top: 170px;
 }
 </style>

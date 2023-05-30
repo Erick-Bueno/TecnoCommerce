@@ -1,15 +1,24 @@
 import { createStore } from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import Cookies from 'js-cookie'
+
 
 const local = new VuexPersistence({
-  storage: window.localStorage
+  storage: {
+    getItem: key => Cookies.get(key),
+    setItem:(key, value) => Cookies.set(key, value,{expires:7,secure:true}),
+    removeItem: key => Cookies.remove(key)
+  }
 })
 
 export default createStore({
   state: {
     user:{
       id: null,
-      jwt: null
+      jwt: null,
+      Nome: null,
+      countFavorites:null,
+      countCart:null
     }
   },
   getters: {
@@ -20,6 +29,15 @@ export default createStore({
     },
     setToken(state, value){
       state.user.jwt = value
+    },
+    setNome(state,value){
+      state.user.Nome = value
+    },
+    setFav(state, value){
+     state.user.countFavorites = value
+    },
+    setCart(state, value){
+      state.user.countCart = value
     }
   },
   actions: {

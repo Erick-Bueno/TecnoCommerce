@@ -1,11 +1,11 @@
 <template>
-    <formlogin></formlogin>
+  <formlogin></formlogin>
 </template>
 <script>
-    import formlogin from '../components/formularioLogin.vue'
-    export default{
-        components:{
-            formlogin
-        }
-    }
+import formlogin from "../components/formularioLogin.vue";
+export default {
+  components: {
+    formlogin,
+  },
+};
 </script>

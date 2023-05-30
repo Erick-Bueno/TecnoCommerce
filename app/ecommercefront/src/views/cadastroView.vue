@@ -1,14 +1,12 @@
 <template>
- <formCadastro></formCadastro>
-
+  <formCadastro></formCadastro>
 </template>
 
-
 <script>
-import formCadastro from '../components/formularioCadastro.vue'
-export default{
-    components:{
-        formCadastro
-    }
-}
+import formCadastro from "../components/formularioCadastro.vue";
+export default {
+  components: {
+    formCadastro,
+  },
+};
 </script>
