@@ -8,7 +8,7 @@ O projeto de e-commerce inclui diversas funcionalidades:
 
 - Catálogo de produtos: Os usuários podem visualizar uma lista de produtos disponíveis para compra.
 - Carrinho de compras: Os usuários podem adicionar produtos ao carrinho, atualizar quantidades e remover itens.
-- Processo de checkout: Os usuários podem efetuar pedidos(fakes).
+- Processo de checkout: Os usuários podem efetuar pedidos.
 
 ## Tecnologias Utilizadas
 
