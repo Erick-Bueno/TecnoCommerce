@@ -10,89 +10,122 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users{
-  id String @id @default(uuid())
-  Nome String @db.Text()
-  Email String @db.Text()
-  Senha String @db.Text()
-  cpf String @db.Text()
-  Telefone String @db.Text()
-  Enderecos Enderecos[]
+model Users {
+  id               String       @id @default(uuid())
+  Nome             String       @db.Text()
+  Email            String       @db.Text()
+  Senha            String       @db.Text()
+  cpf              String       @db.Text()
+  Telefone         String       @db.Text()
+  Enderecos        Enderecos[]
   FavoritesProduct Favoritos[]
-  Avaliacoes Avaliacoes[]
-  carrinho Carrinho[]
+  Avaliacoes       Avaliacoes[]
+  carrinho         Carrinho[]
+  Pedido           Pedido[]
 }
 
-model Enderecos{
-  id String @id @default(uuid())
-  author Users @relation(fields: [idUsuario], references: [id])
+model Enderecos {
+  id        String   @id @default(uuid())
+  author    Users    @relation(fields: [idUsuario], references: [id],onDelete: Cascade)
   idUsuario String
-  Nome String @db.Text()
-  Cep String @db.Text()
-  Numero String @db.Text()
-  Bairro String @db.Text()
-  Rua String @db.Text()
-  Cidade String @db.Text()
+  Nome      String   @db.Text()
+  Cep       String   @db.Text()
+  Numero    String   @db.Text()
+  Bairro    String   @db.Text()
+  Rua       String   @db.Text()
+  Cidade    String   @db.Text()
+  Pedido    Pedido[]
 }
-model Tokens{
-  id String @id @default(uuid())
+
+model Tokens {
+  id    String @id @default(uuid())
   Email String @db.Text()
   Token String @db.Text()
 }
 
-model Products{
-  id String @id @default(uuid())
-  NomeProduto String @db.LongText()
-  DescProduto String @db.LongText()
-  Quantidade Int @db.Int() 
-  Preco Decimal @db.Decimal(16,2)
-  img String @db.LongText()
-  Vendidos Int @db.Int()
-  Modelo String @db.Text()
-  Marca String @db.Text()
-  Enderecos Promocoes[]
+model Products {
+  id               String       @id @default(uuid())
+  NomeProduto      String       @db.LongText()
+  DescProduto      String       @db.LongText()
+  Quantidade       Int          @db.Int()
+  Preco            Decimal      @db.Decimal(16, 2)
+  img              String       @db.LongText()
+  Vendidos         Int          @db.Int()
+  Modelo           String       @db.Text()
+  Marca            String       @db.Text()
+  Enderecos        Promocoes[]
   FavoritesProduct Favoritos[]
-   Avaliacoes Avaliacoes[]
-   carrinho Carrinho[]
- 
-}
-model Promocoes{
-  id String @id @default(uuid())
-  product Products @relation(fields: [idProduct], references: [id])
-  idProduct String
-  promovalor Decimal @db.Decimal(16,2)
+  Avaliacoes       Avaliacoes[]
+  carrinho         Carrinho[]
+  ItemPedido       ItemPedido[]
 }
 
-model Favoritos{
-  id String @id @default(uuid())
-  product Products @relation(fields: [id_product], references: [id])
+model Promocoes {
+  id         String   @id @default(uuid())
+  product    Products @relation(fields: [idProduct], references: [id],onDelete: Cascade)
+  idProduct  String
+  promovalor Decimal  @db.Decimal(16, 2)
+}
+
+model Favoritos {
+  id         String   @id @default(uuid())
+  product    Products @relation(fields: [id_product], references: [id],onDelete: Cascade)
   id_product String
-  user Users @relation(fields: [id_user], references: [id])
-  id_user String
+  user       Users    @relation(fields: [id_user], references: [id],onDelete: Cascade)
+  id_user    String
 }
 
-model Avaliacoes{
-  id String @id @default(uuid())
-  user Users @relation(fields: [id_user], references: [id])
-  id_user String
-  product Products @relation(fields: [id_product], references: [id])
+model Avaliacoes {
+  id         String   @id @default(uuid())
+  user       Users    @relation(fields: [id_user], references: [id],onDelete: Cascade)
+  id_user    String
+  product    Products @relation(fields: [id_product], references: [id],onDelete: Cascade)
   id_product String
-  Comentario String @db.LongText()
-  Nota Decimal @db.Decimal(2,1)
-  Date DateTime  @default(now())
+  Comentario String   @db.LongText()
+  Nota       Decimal  @db.Decimal(2, 1)
+  Date       DateTime @default(now())
 }
 
-model Carrinho{
-  id String @id @default(uuid())
-  user Users @relation(fields: [id_user], references: [id] )
-  id_user String
-  produto Products @relation(fields: [id_product], references: [id])
-  id_product String
-  quantidade Int @default(1)
-  valor_unit Decimal @db.Decimal(16,2)
-  valor_unit_total Decimal @db.Decimal(16,2)
-  valor_frete Decimal? @db.Decimal(16,2) 
-
-
+model Carrinho {
+  id               String   @id @default(uuid())
+  user             Users    @relation(fields: [id_user], references: [id],onDelete: Cascade)
+  id_user          String
+  produto          Products @relation(fields: [id_product], references: [id],onDelete: Cascade)
+  id_product       String
+  quantidade       Int      @default(1)
+  valor_unit       Decimal  @db.Decimal(16, 2)
+  valor_unit_total Decimal  @db.Decimal(16, 2)
+  valor_frete      Decimal? @db.Decimal(16, 2)
 }
 
+enum Status {
+  PENDENTE
+  ENVIADO
+  RECEBIDO
+}
+
+model Pedido {
+  id          String       @id @default(uuid())
+  orderNumber String       @default(uuid())
+  date        DateTime     @default(now())
+  user        Users        @relation(fields: [userId], references: [id],onDelete: Cascade)
+  userId      String
+  valorTotal  Decimal      @db.Decimal(16, 2)
+  ItemPedido  ItemPedido[]
+  status      Status       @default(PENDENTE)
+  valorFrete  Decimal      @db.Decimal(16, 2)
+  endereco    Enderecos    @relation(fields: [enderecoId], references: [id],onDelete: Cascade)
+  enderecoId  String
+
+  @@index([orderNumber])
+}
+
+model ItemPedido {
+  id         String   @id @default(uuid())
+  produto    Products @relation(fields: [idProduct], references: [id],onDelete: Cascade)
+  idProduct  String
+  pedido     Pedido   @relation(fields: [idPedido], references: [id], onDelete: Cascade)
+  idPedido   String
+  quantity   BigInt   @db.BigInt()
+  valorTotal Decimal  @db.Decimal(16, 2)
+}

@@ -50,4 +50,8 @@ export interface IProductRepository {
   removeProductFromCart(id_user: string, id_product: string);
   QuantityProductsInCart(id_user: string);
   searchProduct(product_name: string);
+  findCountProductsByName(product_name: string)
+  pagination(offset:number, productName:string)
+  listAssessment(idUser:string)
+  listAssesmentSeeMore(idUser:string , data:string)
 }

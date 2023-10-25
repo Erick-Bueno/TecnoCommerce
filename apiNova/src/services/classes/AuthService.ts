@@ -57,6 +57,7 @@ export class AuthService implements IAuthService {
     );
     const QuantityProductsInCart =
       await this.productRepository.QuantityProductsInCart(log.id);
+    const listProductsFavoriteds = await this.productRepository.listUserFavoritedProducts(log.id)
     const resp = {
       token: jwt,
       id: id,
@@ -64,6 +65,7 @@ export class AuthService implements IAuthService {
       Nome: log.Nome,
       countfav: favs,
       countCart: QuantityProductsInCart,
+      listProductsFavoriteds: listProductsFavoriteds
     };
     return resp;
   }

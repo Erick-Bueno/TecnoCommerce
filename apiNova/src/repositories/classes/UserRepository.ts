@@ -14,15 +14,16 @@ export class UserRepository implements IUserRepository {
     private readonly enderRepository: IEnderRepository
   ) {}
   async DeleteUserAccount(id: string) {
-    try {
-      const UserAccountDeleted = await cliente.users.delete({
-        where: { id: id },
-      });
-
-      return "conta deletada";
-    } catch (error) {
-      return error;
-    }
+      const deletarAccount = await cliente.$transaction(async(tx)=>{
+        const user = await tx.users.delete({where:{id:id}});
+        const pedidos = await tx.pedido.deleteMany({where:{userId:id}})
+        const enderecos = await tx.enderecos.deleteMany({where:{idUsuario:id}})
+        const itempedidos = await tx.itemPedido.deleteMany({where:{pedido:{userId:id}}})
+        const avaliacoes = await tx.avaliacoes.deleteMany({where:{id_user:id}})
+        const favoritos = await tx.favoritos.deleteMany({where:{id_user:id}})
+        const carrinho = await tx.favoritos.deleteMany({where:{id_user:id}})
+      })
+      return deletarAccount;
   }
   async Registrer({ Nome, Email, Senha, cpf, Telefone }: UserCadastroDto) {
     try {

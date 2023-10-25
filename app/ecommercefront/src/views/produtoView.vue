@@ -23,7 +23,9 @@
         <span class="tecno">TecnoComerce</span>
       </p>
       <section class="cont-desc">{{ Desc }}</section>
-      <button @click="addtocart()" class="cart">COMPRAR</button>
+      <div class="container-cart-button">
+        <button @click="addtocart()" class="cart">COMPRAR</button>
+      </div>
     </section>
   </section>
   <section class="container-detal">
@@ -66,9 +68,7 @@
               hover
               half-increments
               size="xx-large"
-              :full-icon="iconfull"
-              :half-icon="iconhalf"
-              :empty-icon="emptystar"
+              color="yellow"
               :dense="true"
             ></v-rating>
           </div>
@@ -86,7 +86,9 @@
                 placeholder="Digite aqui sua avaliação"
               ></textarea>
             </form>
-            <button class="enviar-av" @click="assessment()">ENVIAR</button>
+            <div class="container-enviar-av">
+              <button class="enviar-av" @click="assessment()">ENVIAR</button>
+            </div>
           </article>
         </div>
       </section>
@@ -223,11 +225,18 @@ export default {
       valor_antigo: null,
     };
   },
+  watch: {
+    "$route.params.id"(newId) {
+      this.id = newId;
+      this.findedProduct();
+      this.listFourAssessment();
+    },
+  },
+
   components: { iconfull, iconhalf, emptystar, mensagemSucesso, MensagemErro },
   methods: {
     async findedProduct() {
       const resp = await axios.get(`http://localhost:8055/product/${this.id}`);
-
       this.NomeProduto = resp.data.NomeProduto;
       this.Preco = resp.data.Preco;
       this.Desc = resp.data.DescProduto;
@@ -326,15 +335,34 @@ export default {
   margin-top: -0.2rem;
   margin-left: 0.5rem;
 }
+.container-cart-button {
+  text-align: center;
+}
 .v-btn--icon .v-icon {
   font-size: 80px;
 }
+@media screen and (max-width: 375px) {
+  .v-btn--icon .v-icon {
+  font-size: 60px;
+
+}
+  .posi{
+    margin-left: 0px;
+  }
+}
+@media screen and (max-width: 320px) {
+  .v-btn--icon .v-icon {
+  font-size: 45px;
+}
+}
+
 </style>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
 .imgProduct {
   width: 600px;
   margin-right: 50px;
+  padding-top: 3rem;
 }
 .container-avaliar {
   animation-name: aparecercont;
@@ -453,6 +481,7 @@ export default {
   font-weight: bolder;
   padding-right: 0.2rem;
 }
+
 .container-prod {
   display: flex;
   flex-direction: row;
@@ -552,7 +581,7 @@ export default {
 }
 .container-info {
   background-color: rgba(0, 162, 255, 0.993);
-  height: 400px;
+  height: 424px;
   width: 600px;
   margin-top: 70px;
   padding: 20px;
@@ -634,5 +663,125 @@ export default {
 }
 .cart:hover {
   background-color: rgba(17, 66, 94, 0.993);
+}
+
+@media screen and (max-width: 1024px) {
+  .imgProduct {
+    width: 300px;
+  }
+  .container-info {
+    width: 400px;
+    margin-top: 20px;
+  }
+  .container-vendidos {
+    right: 10px;
+  }
+  .NomeProdutoMaius {
+    width: 0px;
+  }
+  .DescProduct {
+    width: 200px;
+  }
+  .cart {
+    right: 42px;
+  }
+  .container-form-av {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .container-info {
+    margin-top: 3rem;
+  }
+  .name-prod {
+    width: 100px;
+  }
+}
+@media screen and (max-width: 425px) {
+  .container-prod {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .geral{
+    flex-direction: column;
+    word-wrap: break-word;
+  }
+  .veja{
+    margin: 0px;
+    margin-bottom: 1rem;
+  }
+  .av-text{
+  
+    margin: 0px;
+    padding: 10px;
+  }
+  .avtext {
+    width: 300px;
+  }
+  .container-detal {
+    display: flex;
+    flex-direction: column;
+  }
+  .imgProduct {
+    margin-right: 0;
+  }
+  .container-info {
+    margin: 0px;
+  }
+  .descDetalhada {
+    flex-direction: column;
+  }
+  .detalhesprod {
+    margin-right: 0px;
+    text-align: center;
+    width: 100%;
+  }
+  .img_desc {
+    margin: 0px;
+  }
+  .DescProduct {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .NomeProdutoMaius {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .container-av-1 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 1rem;
+  }
+  .container-av {
+    margin: 0px;
+  }
+  .avaliar {
+    margin: 0px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .container-info {
+    width: 350px;
+  }
+  .Vendidos {
+    width: 150px;
+  }
+  .cart {
+    right: 35px;
+  }
+ 
+}
+@media screen and (max-width: 320px) {
+  .container-info {
+    width: 300px;
+  }
+  .cart {
+    right: 30px;
+  }
 }
 </style>

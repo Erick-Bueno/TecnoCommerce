@@ -14,16 +14,20 @@ import { EnderService } from "./services/classes/EnderService";
 import { ProductController } from "./Controllers/ProductController";
 import { ProductsServices } from "./services/classes/ProductsService";
 import { ProductRepository } from "./repositories/classes/ProductRepository";
+import { PedidoController } from "./Controllers/PedidoController";
+import {PedidoService} from "./services/classes/PedidoService"
+import {PedidoRepository} from "./repositories/classes/PedidoRepository"
 const router = Express.Router();
 
 const enderrepostiroy = new EnderRepository();
-
+const pedidoRepository = new PedidoRepository()
 const tokenrepository = new TokenRepository();
 const userrepository = new UserRepository(tokenrepository, enderrepostiroy);
 const userService = new UserService(
   userrepository,
   tokenrepository,
-  enderrepostiroy
+  enderrepostiroy,
+  pedidoRepository
 );
 const usercontroller = new UserController(userService);
 
@@ -42,6 +46,9 @@ const authcontroller = new AuthController(authservice);
 const enderService = new EnderService(enderrepostiroy, userrepository);
 const endercontroller = new EnderController(enderService);
 
+
+const pedidoService = new PedidoService(pedidoRepository)
+const pedidoController = new PedidoController(pedidoService)
 /*USER ROUTES ================*/
 
 router.post("/Register", async function (req: Request, res: Response) {
@@ -112,6 +119,15 @@ router.post(
     return RegisterProduct;
   }
 );
+
+router.get("/assessment/:id", async function(req:Request, res:Response) {
+  const listAssesment = await productController.listAssesment(req, res)
+  return listAssesment
+})
+router.post("/assessment/:id", async function(req:Request, res:Response){
+  const listAssesment = await productController.listAssesmentSeeMore(req, res)
+  return listAssesment
+})
 
 router.get("/productBestSeller", async function (req: Request, res: Response) {
   const FindProductBestSeller = await productController.findProduct(req, res);
@@ -216,5 +232,26 @@ router.post("/search", async function(req: Request, res: Response){
   );
   return searchProduct;
 });
+router.get("/products/:productName", async function (req:Request, res:Response){
+  const findCountProduct = await productController.findCountProduct(req, res)
+  return findCountProduct
+})
+router.post("/pagination", async function(req:Request, res:Response){
+  const products = await productController.paginationProducts(req, res)
+  return products
+})
+/*PEDIDO ================== */
+router.post("/order", async function(req:Request, res:Response){
+  const order = await pedidoController.createOrder(req, res)
+  return order   
+})
+router.get("/order/:id", async function(req:Request, res:Response){
+  const listOrder = await pedidoController.listOrder(req, res)
+  return listOrder
+})
+router.get("/orderproducts/:id", async function(req: Request, res:Response){
+  const listOrderProducts = await pedidoController.listOrderProducts(req, res)
 
+  return listOrderProducts
+})
 export default router;

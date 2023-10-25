@@ -16,11 +16,12 @@
         </ul>
       </section>
       <section>
-        <p class="titulo">Sobre Mim</p>
-        <p class="liii">
-          Entusiasta do desenvolvimento, <br />
-          que ama fazer projetos novos e busca um emprego :).
-        </p>
+        <ul>
+          <li class="titulo">Sobre Mim</li>
+          <li class="liii">ntusiasta do desenvolvimento, <br />
+          que ama fazer projetos novos e busca um emprego :).</li>
+          <li></li>
+        </ul>
       </section>
     </section>
     <section class="conts">
@@ -128,5 +129,14 @@ ul {
   font-weight: bolder;
   font-family: Arial, Helvetica, sans-serif;
   padding-top: 20px;
+}
+@media screen and (max-width:425px) {
+    .listas{
+      flex-direction: column;
+ 
+    }
+    .listas ul, section{
+      padding: 1rem;
+    }
 }
 </style>

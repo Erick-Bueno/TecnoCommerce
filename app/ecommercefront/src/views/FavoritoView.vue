@@ -34,7 +34,7 @@
         <p v-else class="prodpreco preco">{{ prod.Preco }}</p>
       </div>
       <div>
-        <button class="buy">COMPRAR</button>
+        <router-link :to="{ name: 'produto', params: { id: prod.id } }"><button class="buy">COMPRAR</button></router-link>
       </div>
     </div>
   </section>
@@ -75,6 +75,7 @@ export default {
 
       this.favList = res.data;
     },
+  
     async desfavoritar(id_prod) {
       const res = await axios.delete(
         `http://localhost:8055/desfavoriteProducts/${id_prod}/${this.$store.state.user.id}`
@@ -152,6 +153,7 @@ export default {
   padding: 20px;
   position: relative;
   background-color: white;
+  justify-content: space-between;
 }
 .containerImgName {
   display: flex;
@@ -189,5 +191,29 @@ export default {
   margin-left: 40px;
   width: 300px;
   margin-top: 35px;
+}
+@media screen and (max-width:552px) {
+  .card{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .containerImgName{
+    flex-direction: column;
+  }
+  .ProductName{
+    border: none;
+    text-align: center;
+    padding-right: 0rem;
+  }
+  .prodpreco{
+    text-align: center;
+  }
+  .precos{
+    margin: 0rem;
+    text-align: center;
+    border: none;
+  }
+
 }
 </style>

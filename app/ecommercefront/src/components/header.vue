@@ -34,19 +34,23 @@
           Meus Endereços
         </section>
       </router-link>
-      <section class="opc">
-        <img
-          style="width: 30px"
-          class="imgs"
-          src="/images/ferramenta.png"
-          alt=""
-        />
-        Meus Pedidos
-      </section>
-      <section class="opc">
-        <img style="width: 30px" class="imgs" src="/images/joinha.png" alt="" />
-        Minhas Avaliações
-      </section>
+      <router-link to="/pedidos">
+        <section class="opc">
+          <img
+            style="width: 30px"
+            class="imgs"
+            src="/images/ferramenta.png"
+            alt=""
+          />
+          Meus Pedidos
+        </section>
+      </router-link>
+      <router-link to="/avaliacoes">
+        <section class="opc">
+          <img style="width: 30px" class="imgs" src="/images/joinha.png" alt="" />
+          Minhas Avaliações
+        </section>
+      </router-link>
 
       <section class="logg">
         <button class="btn-logout" @click="logout">logout</button>
@@ -54,22 +58,28 @@
     </article>
   </section>
   <div v-show="MostarOverlay" class="overlay" @click="fechar_overlay"></div>
+
+
+  
   <header>
-    <router-link to="/"
-      ><img class="logo" src="/images/logo.png" alt=""
-    /></router-link>
+  
+    <img class="logo" @click="goHome()" src="/images/logo.png" alt="">
+
     <div class="input-cont">
       <input
         class="inputt"
+        @keydown.enter="fazerpesquisa()"
         type="text"
         placeholder="Buscar"
         @input="pesquisar()"
+        
         v-model="ProductName"
       />
       <transition name="fade">
         <div
           class="produtos"
           v-show="produtos.length > 0"
+          ref="produtos"
         >
           <div class="prods" v-for="produto in produtos">
             <div class="produto_dado">
@@ -78,7 +88,10 @@
                 :src="`http://localhost:8055/${produto.img}`"
                 alt=""
               />
-              <p class="NomeProduto">{{ produto.NomeProduto }}</p>
+              <router-link class="link" :to="`/produto/${produto.id}`">
+                <p class="NomeProduto">{{ produto.NomeProduto }}</p>
+            
+              </router-link>
             </div>
           </div>
         </div>
@@ -86,7 +99,7 @@
     </div>
 
     <section v-show="!logadoounao" class="sec1">
-      <div><img src="/images/user.png" alt="" /></div>
+      <div><img class="perf" src="/images/user.png" alt="" /></div>
       <p class="p1">
         Faça
         <router-link to="/login"><span class="log">LOGIN</span></router-link> ou
@@ -140,6 +153,7 @@
 </template>
 
 <script>
+import router from "@/router";
 import axios from "axios";
 export default {
   name: "cabeça",
@@ -174,14 +188,19 @@ export default {
       return this.$store.state.user.countCart;
     },
   },
-  mounted() {
-    this.carregardados();
-  },
   methods: {
     async carregardados() {
       this.Nome = this.$store.state.user.Nome;
       this.Inicial = this.$store.state.user.Nome[0];
       this.firstName = this.Nome.split(" ")[0];
+    },
+    goHome(){
+      return router.push("/")
+    },
+    fazerpesquisa(){
+      this.$router.push({path:"/produtos", query:{page:1, produto:this.ProductName}})
+      this.produtos = []
+      this.ProductName = ''
     },
     async pesquisar() {
       if (this.ProductName == "") {
@@ -253,9 +272,13 @@ export default {
   font-size: 12px;
   cursor: pointer;
   transition: 0.2s ease-in-out;
+  color: black;
 }
 .NomeProduto:hover {
   color: rgb(13, 202, 186);
+}
+.link{
+  color: black;
 }
 .fade-leave-active {
   transition: opacity 0.2s ;
@@ -320,15 +343,13 @@ export default {
 .links .router-link-active .opc {
   background-color: rgb(7, 103, 128);
 }
-.links .router-link-active .opc {
-  background-color: rgb(7, 103, 128);
-}
+
 .produtos {
   height: 200px;
   width: 300px;
   background-color: white;
   position: absolute;
-  top: 100px;
+  top: 40px;
   overflow-y: scroll;
   animation-name: produto_aparece_2;
   animation-duration: 0.5s;
@@ -400,7 +421,8 @@ export default {
 
 .a1 {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   height: 100vh;
 }
@@ -436,9 +458,7 @@ export default {
   color: white;
   font-size: 25px;
   font-family: Arial, Helvetica, sans-serif;
-  position: absolute;
-  top: 0;
-  left: 75px;
+;
 }
 .button_2 {
   padding: 10px;
@@ -462,6 +482,7 @@ export default {
 header {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   background-color: rgb(9, 150, 185);
   position: fixed;
@@ -471,7 +492,7 @@ header {
   z-index: 10;
 }
 .username {
-  margin-top: 50px;
+
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
@@ -479,6 +500,7 @@ header {
 }
 .config {
   display: flex;
+  align-items: center;
 }
 .overlay {
   height: 100vh;
@@ -496,20 +518,18 @@ header {
   align-items: center;
   border: 1px solid white;
   border-radius: 50%;
-  margin-top: 35px;
+
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
   color: white;
 }
 .logo {
-  width: 180px;
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-right: 20px;
+  width: 15%;
+  cursor: pointer;
+ margin: 20px;
 }
 .inputt {
-  width: 300px;
-  margin-top: 60px;
+  width: 100%;
   padding: 5px;
   border-radius: 5px;
   border: none;
@@ -518,7 +538,7 @@ header {
 .sec1 {
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
+  
 }
 .p1 {
   font-family: "Courier New", Courier, monospace;
@@ -533,12 +553,12 @@ header {
   text-decoration: underline;
 }
 .carrinho {
-  width: 30px;
+  width: 30px
+;
   
   cursor: pointer;
 }
 .config2 {
-  margin-top: 50px;
   display: flex;
   
  
@@ -549,5 +569,47 @@ a:visited {
 a {
   text-decoration: none;
   color: white;
+}
+@media screen and (max-width: 768px){
+    .menu_aberto{
+      width: 45%;
+    }
+    .p1{
+      display: none;
+    }
+    .perfil{
+      display: none;
+    }
+    .username{
+      display:none;
+    }
+    .perf{
+      display: none;
+    }
+}
+@media screen and (max-width:425px) {
+  .carrin{
+    padding-right: 10px;
+  }
+  header{
+  
+  }
+  .logo{
+    
+  }
+  .inputt{
+    height:20px;
+  }
+  .carrinho{
+    width: 20px;
+  }
+  .menu_aberto{
+      width: 80%;
+    }
+}
+@media screen and (max-width:375px){
+  .inputt{
+    width: 80%;
+  }
 }
 </style>

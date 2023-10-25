@@ -8,16 +8,17 @@ import { hashSync } from "bcrypt";
 import SECRET from "../../secret";
 import { sign } from "jsonwebtoken";
 import { IEnderRepository } from "../../repositories/interfaces/IEnderRepository";
+import {IPedidoRepository} from "../../repositories/interfaces/IPedidoRepository";
 
 export class UserService implements IUserService {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly tokenRepository: ITokenRepository,
-    private readonly enderRepository: IEnderRepository
+    private readonly enderRepository: IEnderRepository,
+    private readonly pedidoRepository: IPedidoRepository
   ) {}
   async DeleteUserAccount({ id, Email }: DeletarUserDto) {
-    const UserAddressDeleted = await this.enderRepository.deletarAccount(id);
-    const UserTokenDeleted = await this.tokenRepository.DeleteToken(Email);
+    
     const accountDeleted = await this.userRepository.DeleteUserAccount(id);
     return accountDeleted;
   }

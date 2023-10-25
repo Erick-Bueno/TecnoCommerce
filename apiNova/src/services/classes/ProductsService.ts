@@ -8,6 +8,34 @@ import { ProductToCartDto } from "../../Dto/ProductToCartDto";
 
 export class ProductsServices implements IProductsService {
   constructor(private readonly productRepository: IProductRepository) {}
+  async listAssessmentSeeMore(idUser: string, data: string) {
+    const listAssesment = await this.productRepository.listAssesmentSeeMore(idUser, data)
+    return listAssesment
+  }
+  async listAssessment(idUser: string) {
+    const listAssessment = await this.productRepository.listAssessment(idUser)
+    return listAssessment
+  }
+  async findCountProductsByName(product_name: string) {
+    const prodCount = await this.productRepository.findCountProductsByName(product_name)
+    let totpages = Math.ceil(prodCount/5)
+    return totpages
+  }
+  async paginationProduct(productName:string, currentpage: number) {
+      let offset = (currentpage - 1)* 5
+      let productsPagination = await this.productRepository.pagination(offset, productName)
+      const productData = productsPagination.map(function(p:any){
+        return{
+          id: p.id,
+          NomeProduto: p.NomeProduto,
+          img: p.img,
+          preco: Number(p.Preco).toLocaleString('pt-br',{style: 'currency', currency:'brl'}),
+          promovalor: p.Enderecos && p.Enderecos.length > 0 ? Number(p.Enderecos[0].promovalor).toLocaleString("pt-br", {style:"currency", currency:"brl"}) : 0,
+          fav: p.FavoritesProduct
+        }
+      })
+      return  productData
+  }
   async searchProduct(product_name: string) {
     const searchingProduct = await this.productRepository.searchProduct(
       product_name
@@ -436,7 +464,8 @@ export class ProductsServices implements IProductsService {
       Modelo,
       Marca,
     });
-
+  
+    
     const ProductCreated = true;
     if (ProductCreatedOrNot == ProductCreated) {
       const MessageSucessProductCreated = {

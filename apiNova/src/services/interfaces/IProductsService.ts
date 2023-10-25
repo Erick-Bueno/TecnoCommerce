@@ -43,4 +43,9 @@ export interface IProductsService {
     freteprice: number
   );
   searchProduct(product_name: string);
+  paginationProduct(productName:string, currentpage:number )
+  findCountProductsByName(product_name: string)
+  listAssessment(idUser:string)
+  listAssessmentSeeMore(idUser:string, data:string)
 }
+

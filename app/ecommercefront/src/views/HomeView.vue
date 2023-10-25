@@ -53,7 +53,6 @@
       </section>
     </div>
     <h4 class="mais-vendidos">Mais Vendidos</h4>
-
     <section class="card-container">
       <article v-for="product in products" class="card">
         <img
@@ -85,7 +84,7 @@
         <!-- -------- -->
 
         <p v-if="parseFloat(product.promovalor) != 0" class="preco-antigo">
-          {{ product.Preco }}
+          {{ product.preco }}
         </p>
 
         <p
@@ -133,6 +132,7 @@ export default {
     async findProdutchBestSeller() {
       const req = await axios.get("http://localhost:8055/productBestSeller");
       this.products = req.data;
+      console.log(this.$store.state.user.productsFavoriteds )
     },
     async Preencherfav(productid) {
       if (this.$store.state.user.id != null) {
@@ -207,7 +207,7 @@ export default {
 
 .containerrr {
   overflow: hidden;
-  width: 1200px;
+  max-width: 1200px;
   padding-top: 40px;
   padding-bottom: 40px;
 
@@ -295,6 +295,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+
 }
 .home {
   background-color: rgb(196, 200, 204);
@@ -310,6 +311,9 @@ export default {
   margin: 30px;
   -webkit-transition: 0.2s ease-in-out;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .card:hover .add-to-cart {
   display: block;
@@ -364,5 +368,16 @@ export default {
 }
 .productName {
   padding-top: 10px;
+}
+
+@media screen and (max-width:768px) {
+    .p1{
+      font-size: 0.2rem;
+    }
+}
+@media screen and (max-width:425px) {
+  .anuncio{
+    padding-top: 0px;
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <section v-show="logadoornot">
     <h1 class="titcart">Carrinho</h1>
+
     <section class="continuarCompra" v-if="produtos.length == 0">
       <p>VOCÊ NÃO POSSUI PRODUTOS NO CARRINHO</p>
       <router-link to="/"
@@ -57,7 +58,7 @@
             <div class="imgProd">
               <img :src="'http://localhost:8055/' + prod.img" alt="" />
             </div>
-            <div class="infosProduto">{{ prod.ProdutoNome }}</div>
+            <p class="infosProduto">{{ prod.ProdutoNome }}</p>
             <div class="quantidade">
               <p class="titquant">Quant.</p>
               <div class="contador">
@@ -94,13 +95,9 @@
               <img class="carro" src="/images/frete.png" alt="" />
               <h1 class="titprodefret">Frete</h1>
             </div>
-            <p v-show="false" class="NoEnder">
+            <p v-show="selectop == null" class="NoEnder">
               *Selecione um endereço para que o frete possa ser calculado
             </p>
-            <article class="findcep" v-if="enderecos.length == 0">
-              <input v-model="cep" class="cep" placeholder="Cep" type="text" />
-              <button @click="find_cep()" class="pesqCep">CEP</button>
-            </article>
             <article class="sedex" v-show="selectop != null">
               <div>
                 <input
@@ -117,7 +114,7 @@
                 >
               </div>
               <div>
-                <p>R$ 185,30</p>
+                <p class="sedex-frete-price">R$ 185,30</p>
               </div>
             </article>
           </article>
@@ -138,7 +135,7 @@
           <p class="valor">{{ valortotcart }}</p>
         </section>
         <div class="contbuttonpag">
-          <button class="pag">EFETUAR O PAGAMENTO</button>
+          <button @click="sendOrder()" class="pag">EFETUAR O PAGAMENTO</button>
         </div>
       </section>
     </section>
@@ -151,6 +148,7 @@ import jwtDecode from "jwt-decode";
 import { authenticaded } from "../authcomponents";
 import mensagemErro from "@/components/mensagemErro.vue";
 import logout from "@/components/logout.vue";
+import MensagemErro from "@/components/mensagemErro.vue";
 export default {
   name: "carrinho",
   data() {
@@ -170,7 +168,7 @@ export default {
       mostrar_msg_erro: false,
     };
   },
-  components: { mensagemErro, logout },
+  components: { mensagemErro, logout, MensagemErro },
   computed: {
     logadoornot() {
       return this.$store.state.user.jwt != null;
@@ -221,7 +219,29 @@ export default {
         this.mostrar_msg_erro = false;
       }, 2000);
     },
+    async sendOrder() {
+      const res = await axios.post("http://localhost:8055/order", {
+        userId: this.$store.state.user.id,
+        totalOrder: this.valortotcart,
+        productData: this.produtos,
+        priceFrete: this.value_frete,
+        enderecoId:this.opselected
+      });
+      console.log(res.data);
+      if (res.data.status == 200) {
+        this.$store.commit("setCart", 0);
+        this.produtos = [];
+      }
 
+      if (res.data.status == 400) {
+        this.mostrar_msg_erro = true;
+        this.mensagem = res.data.msg;
+        setTimeout(() => {
+          this.mostrar_msg_erro = false;
+          this.mensagem = "";
+        }, 2000);
+      }
+    },
     async enviar_frete() {
       const res = await axios.post("http://localhost:8055/frete", {
         id_user: this.$store.state.user.id,
@@ -266,7 +286,7 @@ export default {
       this.produtos = res.data.responseSucess;
       this.valortotcart = res.data.priceTotalCart;
       this.total_sem_frete = res.data.priceTotalCart;
-
+      console.log(res.data);
       scrollTo(0, 0);
     },
     async ListEnderecos() {
@@ -274,6 +294,7 @@ export default {
         `http://localhost:8055/addressUser/${this.$store.state.user.id}`
       );
       this.enderecos = req.data;
+     
     },
     async removeProduct(id) {
       const res = await axios.post("http://localhost:8055/remove", {
@@ -421,6 +442,7 @@ label {
 .precotot {
   margin-top: -2px;
   margin-left: 10px;
+
 }
 .valorprod {
   font-size: 12px;
@@ -570,5 +592,64 @@ label {
 }
 .titprodefret {
   font-size: 1.25rem;
+}
+@media screen and (max-width: 1024px) {
+  .prodEfrete {
+    width: 480px;
+  }
+  .endercontainer {
+    width: 480px;
+  }
+  .infosProduto{
+    width: 100px;
+    padding-right: 0px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+}
+@media screen and (max-width: 425px) {
+  .cart {
+    flex-direction: column;
+  }
+  .endercontainer {
+    width: 300px;
+    margin: auto;
+  }
+  .prodEfrete {
+    width: 366px;
+    margin: auto;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+   
+  }
+  .resumo {
+    margin: auto;
+  }
+  .produto{
+    flex-direction: column;
+    align-items: center;
+   
+
+  }
+  .Preco  {
+    margin-left: 0px;
+    margin-bottom: 3rem ;
+    margin-top: 1rem;
+  }
+
+  
+  .sedex-frete-price {
+    font-size: 0.9rem;
+  }
+  @media screen and (max-width: 320px) {
+    .prodEfrete {
+      width: 305px;
+    }
+    .cep {
+      width: 150px;
+    }
+  
+   
+  }
 }
 </style>

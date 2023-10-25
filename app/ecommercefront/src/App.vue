@@ -1,6 +1,6 @@
 <template>
   <div class="container-geral">
-    <div class="container-cima">
+    <div class="container-cima" :class="{coloro: !mostrar, coloro1:mostrar}">
       <div v-if="mostrar">
         <cabeça></cabeça>
       </div>
@@ -38,10 +38,16 @@ export default {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
 
+}
+.coloro{
+  background-color: rgb(7, 103, 128);
+}
 .container-cima {
   flex: 1;
+  
+}
+.coloro1{
   background-color: rgb(196, 200, 204);
 }
 .conteudo {

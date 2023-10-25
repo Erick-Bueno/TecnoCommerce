@@ -9,7 +9,12 @@ import cadastroendeview from "../views/cadastroEndeView.vue";
 import editarEndeView from "../views/EditarEndeView.vue";
 import produtoview from "../views/produtoView.vue";
 import favoritoview from "../views/FavoritoView.vue";
-import authguard from "@/authguard";
+import paginacaoview from "../views/PaginacaoView.vue"
+import avaliacoesview from "../views/AvaliacoesView.vue"
+import pedidosview from "../views/PedidoView.vue"
+import moreinfosorder from "../views/MoreInfosOrder.vue"
+
+
 
 const routes = [
   {
@@ -38,6 +43,11 @@ const routes = [
     component: MeusdadosView,
   },
   {
+    path: "/produtos",
+    name: "produtos",
+    component: paginacaoview
+  },
+  {
     path: "/endereco",
     name: "endereco",
     component: ListagemEndeView,
@@ -62,6 +72,22 @@ const routes = [
     name: "favoritos",
     component: favoritoview,
   },
+  {
+    path: "/avaliacoes",
+    name: "avaliacoes",
+    component:avaliacoesview
+  },
+  {
+    path: "/pedidos",
+    name: "pedidos",
+    component: pedidosview
+  },
+  {
+    path:"/pedidos/:id",
+    name:"pedido",
+    component: moreinfosorder
+  }
+ 
 ];
 
 const router = createRouter({

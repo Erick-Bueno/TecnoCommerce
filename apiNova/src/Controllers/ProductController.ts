@@ -4,7 +4,7 @@ import { IProductsService } from "../services/interfaces/IProductsService";
 export class ProductController {
   constructor(private readonly productService: IProductsService) {}
   async createProduct(req: Request, res: Response) {
-    var {
+    let {
       NomeProduto,
       DescProduto,
       Quantidade,
@@ -14,7 +14,9 @@ export class ProductController {
       Marca,
     } = req.body;
     const img = req.file;
+
     const src = img?.path!;
+    console.log(src)
     const data = await this.productService.createProduct({
       NomeProduto,
       DescProduto,
@@ -25,7 +27,7 @@ export class ProductController {
       Modelo,
       Marca,
     });
-
+   
     return res.send(data).status(200);
   }
   async findProduct(req: Request, res: Response) {
@@ -138,5 +140,27 @@ export class ProductController {
       product_name
     );
     return res.json(searchingProduct);
+  }
+  async findCountProduct(req: Request, res:Response){
+    const productName = req.params.productName
+    const findCountProduct = await this.productService.findCountProductsByName(productName);
+    return res.json(findCountProduct);
+  }
+  async paginationProducts(req:Request, res:Response){
+    const {currentPage, productName} = req.body
+    const paginationProducts = await this.productService.paginationProduct(productName, currentPage)
+    return res.json(paginationProducts)
+  }
+  async listAssesment(req:Request, res:Response){
+    const id = req.params.id
+    const listAssesment = await this.productService.listAssessment(id)
+    return res.json(listAssesment)
+  }
+  async listAssesmentSeeMore(req:Request, res:Response){
+    const id = req.params.id
+    const data = req.body.data
+   
+     const listAssesment = await this.productService.listAssessmentSeeMore(id, data)
+    return res.json(listAssesment) 
   }
 }

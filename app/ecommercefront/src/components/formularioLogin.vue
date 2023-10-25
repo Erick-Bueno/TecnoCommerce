@@ -105,8 +105,9 @@ export default {
       this.$store.commit("setNome", log.data.msg.Nome);
       this.$store.commit("setFav", log.data.msg.countfav);
       this.$store.commit("setCart", log.data.msg.countCart._sum.quantidade);
-
-      this.$router.push("/");
+      this.$store.commit("setProductFav", log.data.msg.listProductsFavoriteds)
+   
+      this.$router.push("/"); 
     },
     mostrarO() {
       this.mostrarOlho = !this.mostrarOlho;
@@ -126,14 +127,25 @@ export default {
 .cont-log {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 400px;
+  align-items: center; 
   margin-bottom: 150px;
-  position: absolute;
+  height: 100vh;
   background-color: rgb(7, 103, 128);
-  width: 100%;
-  height: 100%;
   top: 0;
+ 
+}
+.log {
+
+  background-color: rgb(9, 64, 78);
+  width: 400px;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px 5px #000000;
+  animation-name: mostrarLog;
+  animation-duration: 0.2s;
+  animation-timing-function: linear;
+
+
+
 }
 .content-msgerro {
   padding-left: 20px;
@@ -143,6 +155,7 @@ export default {
   position: absolute;
   left: 55px;
   border-bottom: 2px solid rgb(7, 103, 128);
+  
   top: 4px;
 }
 .aviso {
@@ -309,16 +322,7 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   margin-bottom: 20px;
 }
-.log {
-  height: 563px;
-  background-color: rgb(9, 64, 78);
-  width: 400px;
-  border-radius: 15px;
-  box-shadow: 5px 5px 15px 5px #000000;
-  animation-name: mostrarLog;
-  animation-duration: 0.2s;
-  animation-timing-function: linear;
-}
+
 @keyframes mostrarLog {
   from {
     opacity: 0;
@@ -339,5 +343,40 @@ export default {
   color: rgb(245, 245, 245);
   font-family: Arial, Helvetica, sans-serif;
   margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1111px) {
+    .cont-logo{
+      display:  none;
+    }
+}
+@media screen and (max-width: 426px) {
+  .log{
+    width: 300px;
+  }
+  .cont-input label{
+    left: 50px;
+  }
+  .iconEmail{
+    left: 25px;
+  }
+  .inputt{
+    padding-left: 25px;
+    
+  }
+  .senha{
+    padding-left: 25px;
+    padding-right: 33px;
+  }
+  .iconOlhoF{
+    right: 28px;
+  }
+  .iconOlho{
+    right: 28px;
+  }
+  .cont-log{
+
+  }
+
 }
 </style>

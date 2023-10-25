@@ -6,6 +6,63 @@ import { FavoriteProductDto } from "../../Dto/favoriteProductDto";
 import { IProductRepository } from "../interfaces/IProductRepository";
 
 export class ProductRepository implements IProductRepository {
+  async listAssesmentSeeMore(idUser: string, data: string) {
+    
+    const listAssesment = await cliente.avaliacoes.findMany({
+      where: { AND: [{ id_user: idUser, Date: { lt: data } }] },
+      take: 4,
+      orderBy:[{Date:"desc"}]
+    });
+    return listAssesment;
+  }
+  async listAssessment(idUser: string) {
+    const listAssessment = await cliente.avaliacoes.findMany({
+      where: { id_user: idUser },
+      take: 4,
+      orderBy: [{ Date: "desc" }],
+    });
+    return listAssessment;
+  }
+
+  async pagination(offset: number, productName: string) {
+    let productsPagination = await cliente.products.findMany({
+      select: {
+        id: true,
+        img: true,
+        NomeProduto: true,
+        Preco: true,
+        Enderecos: {
+          select: {
+            promovalor: true,
+          },
+        },
+        FavoritesProduct: {
+          select: {
+            id_user: true,
+          },
+        },
+      },
+      take: 5,
+      skip: offset,
+      where: {
+        NomeProduto: {
+          contains: productName,
+        },
+      },
+    });
+
+    return productsPagination;
+  }
+  async findCountProductsByName(product_name: string) {
+    const countProducts = await cliente.products.count({
+      where: {
+        NomeProduto: {
+          contains: product_name,
+        },
+      },
+    });
+    return countProducts;
+  }
   async searchProduct(product_name: string) {
     const sarchingProduct = await cliente.products.findMany({
       where: {
@@ -301,7 +358,7 @@ export class ProductRepository implements IProductRepository {
   async findProductBestSeller() {
     try {
       const findedProducts = await cliente.products.findMany({
-        take: 10,
+        take: 6,
         orderBy: [{ Vendidos: "desc" }],
         select: {
           id: true,

@@ -202,6 +202,9 @@ export default {
       this.$store.commit("setid", null);
       this.$store.commit("setToken", null);
       this.$store.commit("setNome", null);
+      this.$store.commit("setCart", null);
+      this.$store.commit("setFav", null);
+      
       this.mostrarPop = false;
 
       console.log(dado);

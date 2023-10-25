@@ -15,7 +15,7 @@ export default {
   color: white;
   font-family: "Courier New", Courier, monospace;
   font-weight: bolder;
-  width: 400px;
+  max-width: 400px;
   padding: 5px;
   text-align: center;
   margin: auto;

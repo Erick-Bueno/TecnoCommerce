@@ -18,7 +18,8 @@ export default createStore({
       jwt: null,
       Nome: null,
       countFavorites:null,
-      countCart:null
+      countCart:null,
+      productsFavoriteds:[]
     }
   },
   getters: {
@@ -38,6 +39,9 @@ export default createStore({
     },
     setCart(state, value){
       state.user.countCart = value
+    },
+    setProductFav(state, value){
+      state.user.productsFavoriteds = value
     }
   },
   actions: {
