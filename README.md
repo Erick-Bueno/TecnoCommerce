@@ -1,5 +1,4 @@
 # Projeto de E-commerce
-Você pode encontrar a demonstração do projeto aqui: https://erick-bueno.github.io/Portfolio/
 
 
 Este é um projeto de e-commerce desenvolvido com Vue.js no frontend e Node.js no backend para a construção da API. O banco de dados utilizado é o MySQL. O projeto permite a criação de uma loja online onde os usuários podem navegar por produtos, adicionar itens ao carrinho e efetuar pedidos.
