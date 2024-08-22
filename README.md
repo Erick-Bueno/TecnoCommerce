@@ -1,11 +1,11 @@
-# Projeto de E-commerce
+# Projeto TecnoCommerce
 
 
 Este é um projeto de e-commerce desenvolvido com Vue.js no frontend e Node.js no backend para a construção da API. O banco de dados utilizado é o MySQL. O projeto permite a criação de uma loja online onde os usuários podem navegar por produtos, adicionar itens ao carrinho e efetuar pedidos.
 
 ## Funcionalidades
 
-O projeto de e-commerce inclui diversas funcionalidades:
+O projeto inclui diversas funcionalidades:
 
 - Catálogo de produtos: Os usuários podem visualizar uma lista de produtos disponíveis para compra.
 - Carrinho de compras: Os usuários podem adicionar produtos ao carrinho, atualizar quantidades e remover itens.
